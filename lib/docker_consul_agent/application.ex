@@ -7,9 +7,16 @@ defmodule DockerConsulAgent.Application do
 
   @impl true
   def start(_type, _args) do
-    children = [
-      {DockerConsulAgent, []}
-    ]
+    children =
+      case(System.get_env("DOCKER_CONSUL_AGENT_ENABLED", "true")) do
+        "true" ->
+          [
+            {DockerConsulAgent, []}
+          ]
+
+        _ ->
+          []
+      end
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
